@@ -1,6 +1,6 @@
 # Minimal C Compiler - Educational Version
 
-A fully functional compiler demonstrating all phases of compilation with extensive educational features. Perfect for teaching compiler design concepts with real, working code.
+A fully functional educational compiler that demonstrates all major compilation phases and generates runnable MIPS assembly. This repository now includes the Project 6 update requirements: comprehensive installation/usage documentation and reproducible performance metrics.
 
 ## 🎯 Purpose
 
@@ -12,13 +12,15 @@ This compiler strips away complexity to show the **essential components** of com
 
 ## 📚 Language Features
 
-Our minimal C-like language supports:
-- **Integer variable declarations**: `int x;`
-- **Assignment statements**: `x = 10;`
-- **Addition operator**: `x + y`
-- **Print statement**: `print(x);`
-
-That's it! No loops, no conditions, no functions - just the bare essentials.
+This C-like teaching language currently supports:
+- **Types**: `int`, `float`, `char`, `string`, `void`
+- **Variables and arrays**: declarations, assignments, array indexing and array writes
+- **Expressions**: arithmetic (`+`, `-`, `*`, `/`), comparisons (`<`, `<=`, `>`, `>=`, `==`, `!=`), logical (`&&`, `||`, `!`)
+- **Control flow**: `while`, `for`, `if`, `if-else`, nested `if`, `switch/case/default`, `break`
+- **Functions**: declarations, typed parameters, function calls, returns
+- **I/O**: `print`, `printi`, `printc`
+- **Intermediate representation and optimization**: TAC generation, copy propagation, constant folding, dead-branch elimination
+- **Code generation**: MIPS assembly output compatible with SPIM/QtSPIM
 
 ## 🔧 Compiler Architecture
 
@@ -150,26 +152,81 @@ addi $sp, $sp, 400    # Restore stack pointer
 ## 🚀 Build & Run
 
 ### Prerequisites
-- `flex` (lexical analyzer generator)
-- `bison` (parser generator)
-- `gcc` (C compiler)
-- MIPS simulator (MARS, SPIM, or QtSPIM) for running output
+- `flex`
+- `bison`
+- `gcc`
+- `make`
+- `spim` or `qtspim` (optional but required to execute generated `.s` files)
 
-### Compilation
+### Installation
+
+macOS (Homebrew):
 ```bash
-# Build the compiler
-make
-
-# Compile a source file
-./minicompiler test.c output.s
-
-# Clean build files
-make clean
+brew install flex bison spim
 ```
+
+Ubuntu/Debian:
+```bash
+sudo apt update
+sudo apt install -y flex bison gcc make spim
+```
+
+### Build and Usage (Step by Step)
+
+Open a terminal and move into the project directory first:
+```bash
+cd /Users/vincentpourier/Downloads/example_folder
+```
+
+Optional sanity check that required tools are available:
+```bash
+command -v flex bison gcc make
+command -v spim   # optional but needed to execute .s output
+```
+
+Build the compiler:
+```bash
+make clean
+make
+```
+
+Compile a source program:
+```bash
+./minicompiler <input.cm> <output.s>
+```
+
+Concrete examples:
+```bash
+./minicompiler test_switch.cm test_switch.s
+./minicompiler project6.cm project6.s
+```
+
+Execute generated assembly (SPIM):
+```bash
+spim -file project6.s
+```
+
+Run Project 6 benchmark metrics:
+```bash
+./project6_benchmark.sh
+cat PROJECT6_PERFORMANCE_METRICS.md
+```
+
+Run metrics for a specific test file:
+```bash
+./project6_benchmark.sh test_switch.cm test_switch.s
+cat PROJECT6_PERFORMANCE_METRICS.md
+```
+
+### Build Artifacts
+- `*.s`: generated MIPS assembly
+- `*.tac`: unoptimized TAC
+- `*.opt.tac`: optimized TAC
 
 ### Example Session
 ```bash
-$ ./minicompiler test.c output.s
+$ cd /Users/vincentpourier/Downloads/Project_5
+$ ./minicompiler test.cm output.s
 
 ╔════════════════════════════════════════════════════════════╗
 ║          MINIMAL C COMPILER - EDUCATIONAL VERSION         ║
@@ -178,7 +235,7 @@ $ ./minicompiler test.c output.s
 ┌──────────────────────────────────────────────────────────┐
 │ PHASE 1: LEXICAL & SYNTAX ANALYSIS                       │
 ├──────────────────────────────────────────────────────────┤
-│ • Reading source file: test.c
+│ • Reading source file: test.cm
 │ • Tokenizing input (scanner.l)
 │ • Parsing grammar rules (parser.y)
 │ • Building Abstract Syntax Tree
@@ -187,6 +244,32 @@ $ ./minicompiler test.c output.s
 
 [... followed by AST, TAC, optimizations, and MIPS generation ...]
 ```
+
+## ⏱️ Project 6 Performance Metrics
+
+Project 6 requires two metrics:
+1. **Compilation time** (time for `minicompiler` to compile source into MIPS)
+2. **Execution time** (time for simulator to execute the generated MIPS)
+
+This repository includes an automated benchmark script:
+
+```bash
+./project6_benchmark.sh
+```
+
+Optional custom input/output:
+```bash
+./project6_benchmark.sh test_switch.cm test_switch.s
+```
+
+The script writes a metrics report to:
+- `PROJECT6_PERFORMANCE_METRICS.md`
+
+The report includes:
+- command lines used
+- measured compilation time
+- measured execution time
+- captured simulator output
 
 ## 📝 Example Programs
 
