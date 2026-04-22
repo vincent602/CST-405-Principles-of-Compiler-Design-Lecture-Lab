@@ -59,4 +59,10 @@ test-switch: $(TARGET)
 		echo "spim not found; generated test_switch.s only"; \
 	fi
 
-.PHONY: all clean test test-switch
+project6: $(TARGET)
+	./$(TARGET) project6.cm project6.s
+
+benchmark: $(TARGET)
+	./project6_benchmark.sh
+
+.PHONY: all clean test test-switch project6 benchmark
